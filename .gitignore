@@ -13,3 +13,15 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# gerber droppings
+## zip bundles
+*.zip
+## drills
+*.drl
+## keepouts
+*.gko
+## pad master top & bottom
+*.gp[tb]
+## top & bottom solder, layer, paste, overlay
+*.g[tb][slpo]
