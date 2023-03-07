@@ -14,6 +14,6 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/yofu/dxf v0.0.0-20190320002657-c8b82bb2fe97 // indirect
-	golang.org/x/image v0.0.0-20220601225756-64ec528b34cd // indirect
+	golang.org/x/image v0.5.0 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 )
