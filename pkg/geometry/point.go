@@ -22,7 +22,13 @@
 // RadialPointGenerator, and basic primitive types like Point
 package geometry
 
+import "fmt"
+
 // Point defines a single metric coordinate in a 2D space.
 type Point struct {
 	X, Y float64
+}
+
+func (p Point) String() string {
+	return fmt.Sprint("(", p.X, ",", p.Y, ")")
 }
