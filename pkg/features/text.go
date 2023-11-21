@@ -43,6 +43,8 @@ type Text struct {
 	// Size somehow describes the size of the text. Specific units not defined
 	// here but probably safest to use points.
 	Size float64
+	// Radians. 0 for normal orientation.
+	Rotate float64
 }
 
 // TextOptionFunc functions mutate a Text structure
@@ -59,6 +61,14 @@ func WithAlignment(align Alignment) TextOptionFunc {
 func WithSize(size float64) TextOptionFunc {
 	return func(t *Text) {
 		t.Size = size
+	}
+}
+
+// WithRotation is a Text option function that configures rotation (in radians)
+// for a text feature
+func WithRotation(r float64) TextOptionFunc {
+	return func(t *Text) {
+		t.Rotate = r
 	}
 }
 
