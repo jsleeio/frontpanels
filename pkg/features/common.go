@@ -36,10 +36,10 @@ const (
 	// Marking features are intended to be used to create aesthetic or legend
 	// features on a panel. This is intentionally the first item in order to
 	// make it the zero-value/default
-	Marking Purpose = iota
+	Marking Purpose = iota // this MUST be the first item
 	// Cutout features are intended to be used to create a hole/void in a
 	// panel
-	Cutout
+	Cutout // this MUST be the last item
 )
 
 // String satisfies the Stringer interface to aid debug printing
@@ -50,7 +50,8 @@ func (p Purpose) String() string {
 	case Cutout:
 		return "cutout"
 	}
-	panic(fmt.Sprintf("invalid Purpose value: %v", p))
+	panic(fmt.Sprintf("invalid Purpose value (valid range is %d..%d): %d",
+		int(Marking), int(Cutout), int(p)))
 }
 
 // Feature interface. Intentionally small.
