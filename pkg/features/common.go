@@ -62,7 +62,7 @@ type Feature interface {
 
 // Alignment specifies an alignment relative to a feature, typically the
 // feature origin. Most likely to be used with Text features.
-type Alignment int64
+type Alignment int
 
 // TopLeft et al specify alignments relative to a defined point, eg.
 // how Text is positioned relative to its origin.
@@ -100,5 +100,6 @@ func (a Alignment) String() string {
 	case BottomRight:
 		return "bottom-right"
 	}
-	panic(fmt.Sprintf("invalid Alignment value: %v", a))
+	panic(fmt.Sprintf("invalid Alignment value (valid range is %d..%d): %d",
+		int(TopLeft), int(BottomRight), int(a)))
 }
