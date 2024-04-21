@@ -35,6 +35,10 @@ const (
 	// millimetres
 	PanelHeight1U = 1.70 * inch
 
+	// ExtraMountingHolesThreshold represents the panel width threshold beyond
+	// which additional mounting holes are required
+	ExtraMountingHolesThreshold = 6
+
 	// MountingHolesLeftOffset represents the distance of the first mounting
 	// hole from the left edge of the panel, in millimetres
 	MountingHolesLeftOffset = 0.2 * inch
@@ -88,6 +92,12 @@ func NewPulplogic(hp int) *Pulplogic {
 
 // Width returns the width of a Pulplogic panel, in millimetres
 func (p Pulplogic) Width() float64 {
+	if p.HP == 1 {
+		// Special case: 1hp panels according to the Doepfer specification should
+		// be 5.00mm wide, and at this size, we don't have much room for error.
+		// Return 0.0 for HorizontalFit() and 5.00 for Width()
+		return 5.00
+	}
 	return HP * float64(p.HP)
 }
 
@@ -103,19 +113,40 @@ func (p Pulplogic) MountingHoleDiameter() float64 {
 }
 
 // MountingHoles generates a set of Point objects representing the mounting
-// hole locations of a Pulplogic panel
+// hole locations of a Intellijel panel
 func (p Pulplogic) MountingHoles() []geometry.Point {
+	lhsx := MountingHolesLeftOffset
+	// special case; 1HP Eurorack panels are narrower than MountingHolesLeftOffset.
+	// I'm not completely sure what the correct thing to do here is but it SEEMS
+	// logical to move it left by 1HP, leaving the hole pretty close to the middle
+	// of a 1HP panel.
+	//
+	// @negativspace on ModWiggler says he leaves the hole in the centre on 1hp,
+	// panels, which makes sense, so we'll do that too. With a 5mm panel width
+	// there's not a lot of meat left on either side of an M3 screw hole...
+	if p.HP == 1 {
+		lhsx = p.Width() / 2.0
+	}
 	holes := []geometry.Point{
-		{X: MountingHolesLeftOffset, Y: MountingHoleBottomY1U},
-		{X: MountingHolesLeftOffset, Y: MountingHoleTopY1U},
-		{X: p.Width() - MountingHolesRightOffset, Y: MountingHoleBottomY1U},
-		{X: p.Width() - MountingHolesRightOffset, Y: MountingHoleTopY1U},
+		{X: lhsx, Y: MountingHoleBottomY1U},
+		{X: lhsx, Y: MountingHoleTopY1U},
+	}
+	if p.HP > ExtraMountingHolesThreshold {
+		rhsx := p.Width() - MountingHolesRightOffset
+		holes = append(holes, geometry.Point{X: rhsx, Y: MountingHoleBottomY1U})
+		holes = append(holes, geometry.Point{X: rhsx, Y: MountingHoleTopY1U})
 	}
 	return holes
 }
 
 // HorizontalFit indicates the panel tolerance adjustment for the format
 func (p Pulplogic) HorizontalFit() float64 {
+	if p.HP == 1 {
+		// Special case: 1hp panels according to the Doepfer specification should
+		// be 5.00mm wide, and at this size, we don't have much room for error.
+		// Return 0.0 for HorizontalFit() and 5.00 for Width()
+		return 0.00
+	}
 	return HorizontalFit
 }
 

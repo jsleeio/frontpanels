@@ -81,6 +81,12 @@ func NewEurorack(hp int) *Eurorack {
 
 // Width returns the width of a Eurorack panel, in millimetres
 func (e Eurorack) Width() float64 {
+	if e.HP == 1 {
+		// Special case: 1hp panels according to the Doepfer specification should
+		// be 5.00mm wide, and at this size, we don't have much room for error.
+		// Return 5.00 here and 0.0 for HorizontalFit()
+		return 5.00
+	}
 	return HP * float64(e.HP)
 }
 
@@ -98,10 +104,23 @@ func (e Eurorack) MountingHoleDiameter() float64 {
 // MountingHoles generates a set of Point objects representing the mounting
 // hole locations of a Eurorack panel
 func (e Eurorack) MountingHoles() []geometry.Point {
-	holes := []geometry.Point{
-		{X: MountingHolesLeftOffset, Y: MountingHoleBottomY3U},
-		{X: MountingHolesLeftOffset, Y: MountingHoleTopY3U},
+	lhsx := MountingHolesLeftOffset
+	// special case; 1HP Eurorack panels are narrower than MountingHolesLeftOffset.
+	// I'm not completely sure what the correct thing to do here is but it SEEMS
+	// logical to move it left by 1HP, leaving the hole pretty close to the middle
+	// of a 1HP panel.
+	//
+	// @negativspace on ModWiggler says he leaves the hole in the centre on 1hp,
+	// panels, which makes sense, so we'll do that too. With a 5mm panel width
+	// there's not a lot of meat left on either side of an M3 screw hole...
+	if e.HP == 1 {
+		lhsx = e.Width() / 2.0
 	}
+	holes := []geometry.Point{
+		geometry.Point{X: lhsx, Y: MountingHoleBottomY3U},
+		geometry.Point{X: lhsx, Y: MountingHoleTopY3U},
+	}
+	// mounting holes for wider panels
 	if e.HP > ExtraMountingHolesThreshold {
 		rhsx := MountingHolesLeftOffset + HP*(float64(e.HP-3))
 		holes = append(holes, geometry.Point{X: rhsx, Y: MountingHoleBottomY3U})
@@ -112,6 +131,12 @@ func (e Eurorack) MountingHoles() []geometry.Point {
 
 // HorizontalFit indicates the panel tolerance adjustment for the format
 func (e Eurorack) HorizontalFit() float64 {
+	if e.HP == 1 {
+		// Special case: 1hp panels according to the Doepfer specification should
+		// be 5.00mm wide, and at this size, we don't have much room for error.
+		// So 0.0 is returned here and Width() returns the correct size.
+		return 0.0
+	}
 	return HorizontalFit
 }
 
