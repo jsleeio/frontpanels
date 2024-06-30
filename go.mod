@@ -15,5 +15,5 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/yofu/dxf v0.0.0-20190320002657-c8b82bb2fe97 // indirect
 	golang.org/x/image v0.18.0 // indirect
-	google.golang.org/protobuf v1.26.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 )
