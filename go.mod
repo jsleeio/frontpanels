@@ -1,6 +1,6 @@
 module github.com/jsleeio/frontpanels
 
-go 1.19
+go 1.25.0
 
 require (
 	github.com/gmlewis/go-fonts v0.0.12
@@ -14,6 +14,6 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/yofu/dxf v0.0.0-20190320002657-c8b82bb2fe97 // indirect
-	golang.org/x/image v0.18.0 // indirect
+	golang.org/x/image v0.38.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 )
